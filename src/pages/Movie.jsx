@@ -86,10 +86,19 @@ const Movies = () => {
       )}
 
       {/* Shows */}
-      {!loading && !error && (
-        <section className="max-w-7xl mx-auto px-4 pb-16">
-          <div className=" ">
 
+   
+      {!loading && !error && (
+   <section className="max-w-7xl mx-auto px-4 pb-16">
+   <div className=" ">
+             {search && !loading && (
+  <p className="text-gray-400 mb-6">
+    Search results for:{" "}
+    <span className="text-white font-semibold">
+      {search}
+    </span>
+  </p>
+)}
           <MovieGrid
   shows={shows}
   onDetails={setSelectedShow}

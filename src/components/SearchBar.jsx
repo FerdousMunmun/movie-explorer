@@ -10,7 +10,7 @@ const SearchBar = ({
   };
 
   return (
-    <div className="max-w-2xl flex gap-3 py-1">
+   <div className="max-w-2xl flex flex-col sm:flex-row gap-3 py-1">
       <input
         type="text"
         value={value}
@@ -22,7 +22,7 @@ const SearchBar = ({
 
       <button
         onClick={onSearch}
-        className="bg-red-500 hover:bg-red-600 px-6 rounded-xl font-semibold transition"
+        className="bg-red-500 hover:bg-red-600 px-6 py-3 sm:py-0 rounded-xl font-semibold transition"
       >
         Search
       </button>
