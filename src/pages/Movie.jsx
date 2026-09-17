@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { getAllShows,searchShows } from "../services/MovieApi";
 import MovieCard from "../components/MovieCard";
+import MovieModal from "../components/MovieModal";
+import SearchBar from "../components/SearchBar";
 
 const Movies = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedShow, setSelectedShow] = useState(null);
 
 
   const handleSearch = async () => {
@@ -54,30 +57,12 @@ const Movies = () => {
     <main className="min-h-screen bg-gray-950 text-white">
 
       {/* Header */}
-     <section className="max-w-7xl mx-auto px-4 pb-10">
-  <div className="max-w-2xl flex gap-3">
-
-    <input
-      type="text"
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          handleSearch();
-        }
-      }}
-      placeholder="🔍 Search for a movie..."
-      className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 text-white placeholder-gray-500 outline-none focus:border-red-500 transition"
-    />
-
-    <button
-      onClick={handleSearch}
-      className="bg-red-500 hover:bg-red-600 px-6 rounded-xl font-semibold transition"
-    >
-      Search
-    </button>
-
-  </div>
+   <section className="max-w-7xl mx-auto px-4 pb-10">
+  <SearchBar
+    value={search}
+    onChange={setSearch}
+    onSearch={handleSearch}
+  />
 </section>
 
       {/* Loading */}
@@ -107,14 +92,17 @@ const Movies = () => {
               <MovieCard
   key={show.id}
   show={show}
-  onDetails={() => {}}
+   onDetails={setSelectedShow}
 />
             ))}
 
           </div>
         </section>
       )}
-
+<MovieModal
+  show={selectedShow}
+  onClose={() => setSelectedShow(null)}
+/>
     </main>
   );
 };
