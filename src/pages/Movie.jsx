@@ -3,6 +3,7 @@ import { getAllShows,searchShows } from "../services/MovieApi";
 import MovieCard from "../components/MovieCard";
 import MovieModal from "../components/MovieModal";
 import SearchBar from "../components/SearchBar";
+  import MovieGrid from "../components/MovieGrid";
 
 const Movies = () => {
   const [shows, setShows] = useState([]);
@@ -10,6 +11,7 @@ const Movies = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [selectedShow, setSelectedShow] = useState(null);
+
 
 
   const handleSearch = async () => {
@@ -86,15 +88,12 @@ const Movies = () => {
       {/* Shows */}
       {!loading && !error && (
         <section className="max-w-7xl mx-auto px-4 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className=" ">
 
-            {shows.map((show) => (
-              <MovieCard
-  key={show.id}
-  show={show}
-   onDetails={setSelectedShow}
+          <MovieGrid
+  shows={shows}
+  onDetails={setSelectedShow}
 />
-            ))}
 
           </div>
         </section>

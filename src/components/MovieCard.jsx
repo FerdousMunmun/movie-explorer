@@ -1,6 +1,6 @@
 const MovieCard = ({ show, onDetails }) => {
   return (
-    <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gray-700 transition">
+    <div className="w-full bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-red-500/50 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
       {/* Poster */}
       <div className="h-80 bg-gray-800">
@@ -8,7 +8,7 @@ const MovieCard = ({ show, onDetails }) => {
           <img
             src={show.image.medium}
             alt={show.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition duration-500 hover:scale-105"
           />
         ) : (
           <div className="h-full flex items-center justify-center text-gray-500">

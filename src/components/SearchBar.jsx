@@ -10,7 +10,7 @@ const SearchBar = ({
   };
 
   return (
-    <div className="max-w-2xl flex gap-3">
+    <div className="max-w-2xl flex gap-3 py-1">
       <input
         type="text"
         value={value}
