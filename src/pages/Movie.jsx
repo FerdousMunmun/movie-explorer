@@ -1,8 +1,33 @@
+import { useEffect, useState } from "react";
+import { getAllShows } from "../services/MovieApi";
+
 const Movies = () => {
+  const [shows, setShows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchShows = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getAllShows();
+
+        setShows(data);
+      } catch (error) {
+        setError("Failed to load shows.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShows();
+  }, []);
+
   return (
     <main className="min-h-screen bg-gray-950 text-white">
-      
-      {/* Page Header */}
+
+      {/* Header */}
       <section className="max-w-7xl mx-auto px-4 pt-12 pb-8">
         <h1 className="text-4xl md:text-5xl font-bold mb-3">
           Explore Movies & Shows
@@ -13,7 +38,7 @@ const Movies = () => {
         </p>
       </section>
 
-      {/* Search Section */}
+      {/* Search */}
       <section className="max-w-7xl mx-auto px-4 pb-10">
         <div className="max-w-2xl">
           <input
@@ -24,77 +49,73 @@ const Movies = () => {
         </div>
       </section>
 
-      {/* Movie Grid */}
-      <section className="max-w-7xl mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-          {/* Temporary Cards */}
-          <div className="bg-gray-900 rounded-xl p-4">
-            <div className="h-72 bg-gray-800 rounded-lg mb-4"></div>
-
-            <h2 className="text-lg font-semibold">
-              Movie Title
-            </h2>
-
-            <p className="text-gray-400 mt-2">
-              ⭐ 8.5 • 📅 2024
-            </p>
-
-            <button className="w-full mt-4 bg-red-500 hover:bg-red-600 py-2 rounded-lg transition">
-              See Details
-            </button>
-          </div>
-
-          <div className="bg-gray-900 rounded-xl p-4">
-            <div className="h-72 bg-gray-800 rounded-lg mb-4"></div>
-
-            <h2 className="text-lg font-semibold">
-              Movie Title
-            </h2>
-
-            <p className="text-gray-400 mt-2">
-              ⭐ 8.2 • 📅 2023
-            </p>
-
-            <button className="w-full mt-4 bg-red-500 hover:bg-red-600 py-2 rounded-lg transition">
-              See Details
-            </button>
-          </div>
-
-          <div className="bg-gray-900 rounded-xl p-4">
-            <div className="h-72 bg-gray-800 rounded-lg mb-4"></div>
-
-            <h2 className="text-lg font-semibold">
-              Movie Title
-            </h2>
-
-            <p className="text-gray-400 mt-2">
-              ⭐ 8.0 • 📅 2022
-            </p>
-
-            <button className="w-full mt-4 bg-red-500 hover:bg-red-600 py-2 rounded-lg transition">
-              See Details
-            </button>
-          </div>
-
-          <div className="bg-gray-900 rounded-xl p-4">
-            <div className="h-72 bg-gray-800 rounded-lg mb-4"></div>
-
-            <h2 className="text-lg font-semibold">
-              Movie Title
-            </h2>
-
-            <p className="text-gray-400 mt-2">
-              ⭐ 7.8 • 📅 2021
-            </p>
-
-            <button className="w-full mt-4 bg-red-500 hover:bg-red-600 py-2 rounded-lg transition">
-              See Details
-            </button>
-          </div>
-
+      {/* Loading */}
+      {loading && (
+        <div className="text-center py-20">
+          <p className="text-xl text-gray-400">
+            Loading shows...
+          </p>
         </div>
-      </section>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="text-center py-20">
+          <p className="text-red-400 text-xl">
+            {error}
+          </p>
+        </div>
+      )}
+
+      {/* Shows */}
+      {!loading && !error && (
+        <section className="max-w-7xl mx-auto px-4 pb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            {shows.map((show) => (
+              <div
+                key={show.id}
+                className="bg-gray-900 rounded-xl overflow-hidden"
+              >
+                {/* Image */}
+                <div className="h-80 bg-gray-800">
+                  {show.image?.medium ? (
+                    <img
+                      src={show.image.medium}
+                      alt={show.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-gray-500">
+                      No Image
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+
+                  <h2 className="text-lg font-semibold truncate">
+                    {show.name}
+                  </h2>
+
+                  <p className="text-gray-400 mt-2">
+                    ⭐ {show.rating?.average || "N/A"}
+                    {" • "}
+                    📅 {show.premiered?.slice(0, 4) || "N/A"}
+                  </p>
+
+                  <button className="w-full mt-4 bg-red-500 hover:bg-red-600 py-2 rounded-lg transition">
+                    See Details
+                  </button>
+
+                </div>
+              </div>
+            ))}
+
+          </div>
+        </section>
+      )}
 
     </main>
   );
