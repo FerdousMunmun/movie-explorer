@@ -1,10 +1,35 @@
 import { useEffect, useState } from "react";
-import { getAllShows } from "../services/MovieApi";
+import { getAllShows,searchShows } from "../services/MovieApi";
 
 const Movies = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+
+
+  const handleSearch = async () => {
+  if (!search.trim()) {
+    const data = await getAllShows();
+    setShows(data);
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setError("");
+
+    const data = await searchShows(search);
+
+    const results = data.map((item) => item.show);
+
+    setShows(results);
+  } catch (error) {
+    setError("Failed to search shows.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     const fetchShows = async () => {
@@ -28,26 +53,31 @@ const Movies = () => {
     <main className="min-h-screen bg-gray-950 text-white">
 
       {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 pt-12 pb-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-3">
-          Explore Movies & Shows
-        </h1>
+     <section className="max-w-7xl mx-auto px-4 pb-10">
+  <div className="max-w-2xl flex gap-3">
 
-        <p className="text-gray-400">
-          Search and discover your favorite movies and TV shows.
-        </p>
-      </section>
+    <input
+      type="text"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleSearch();
+        }
+      }}
+      placeholder="🔍 Search for a movie..."
+      className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 text-white placeholder-gray-500 outline-none focus:border-red-500 transition"
+    />
 
-      {/* Search */}
-      <section className="max-w-7xl mx-auto px-4 pb-10">
-        <div className="max-w-2xl">
-          <input
-            type="text"
-            placeholder="🔍 Search for a movie..."
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 text-white placeholder-gray-500 outline-none focus:border-red-500 transition"
-          />
-        </div>
-      </section>
+    <button
+      onClick={handleSearch}
+      className="bg-red-500 hover:bg-red-600 px-6 rounded-xl font-semibold transition"
+    >
+      Search
+    </button>
+
+  </div>
+</section>
 
       {/* Loading */}
       {loading && (
